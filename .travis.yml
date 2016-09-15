@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: Ej0Fh8BVjmznja2TpAoIA8L4oM6NrLeWq9WurpEKyeF+YFj+Y4K9qW1VotFbqGQz/y1FQmRbiWjRPX2OInBsMmb+V+xLvsokdSDdhuHFQ//Cv5JI33pjmEgwfjzK7m5Zo2j1gLXQneMFJ93qCD08TRxhPL1oCVYNTzEjbgvbyHMftTFoUl8prpQOYmGxtzZBljRjQHrLcAn0IeGrD8L9kRJ/Nc0l1qgCBNOZiWi07RcUufuz7lC8DCy7mujbkHArjeoT6TO2U3rgJMY7lRaT6/0rsBkPHgTIlhBtRZ8zEng/b7iyXBjmDkvOZ16r791T3D1lc7AVeJsGsIF2VakZvUCwfZGSperG31dYd9FdDKw0iWBnoBRcx9/9mJ4kmTM4ldVbDeoOhzrByk2d8PCt/r1BCOJuNNpRuMKV85gSpYKSSCij+fsiU2qxUoFv4GbhLvkY1vMeTbz6lRp3WvYDPRbrtb6UWgNfiaKKL/KxmzVCJcJdyv9Mmde9zH1cZCFZfciyx+05uWkeaxPK/K8kWJN9mxfCaYnV8HBWMt8DVBoL+j6v8ioHaxhNBiDAFjHwf2vM5x0YV8pBbDPbHXjdoPBcbsQTz7/IcGRSiw3H0PC13nENUyHSp73+DYsXVQYuBPHd9WelvISxDxWmk4DX/+mu0o0fNibEbk/LDo9ER9U=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/History-of-the-Mackenzies-with-genealogies-of-the-principal-families-of-the-name_3652
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
