@@ -1,5 +1,5 @@
 _repo: History-of-the-Mackenzies-with-genealogies-of-the-principal-families-of-the-name_3652
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -27,6 +27,7 @@ subjects:
 - !lcsh 'Scotland -- Genealogy'
 - !lcsh 'Mackenzie family'
 - !lcc 'CS'
+- GITenberg
 title: History of the Mackenzies, with genealogies of the principal families of the
   name
 url: http://www.gutenberg.org/ebooks/3652
